@@ -1,0 +1,158 @@
+/* page body */
+
+body {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: #FAFAFA !important;
+}
+
+/* NavBar */
+
+.btn-link-dark:hover {
+  color: #292b2c !important;
+}
+
+.nav-dropdown-link,
+.nav-profile-link {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.nav-dropdown-link:hover,
+.nav-profile-link:hover {
+  color: white !important;
+}
+
+.nav-icon {
+  transform: translateY(-4px)
+}
+
+/* login form */
+
+.login-form {
+  text-align: center;
+}
+
+/* loading overlay */
+
+.loading-overlay {
+  position: fixed;
+  /* Sit on top of the page content */
+  width: 100%;
+  /* Full width (cover the whole page) */
+  height: 100%;
+  /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* Black background with opacity */
+  z-index: 2;
+  /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer;
+  /* Add a pointer on hover */
+  pointer-events: none;
+}
+
+.spinner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
+
+/* dashboard page */
+
+:root {
+  --dashbord-card-bg: white;
+  --dashbord-card-padding: 1.8rem;
+  --dashbord-card-radius: 2rem;
+  --dashbord-card-shadow: 0 2rem 3rem rgba(132, 139, 200, 0.18);
+}
+
+.body {
+  font-family: 'Monaco', monospace !important;
+}
+
+.dashboard-card {
+  margin-top: 1rem;
+  border-color: transparent !important;
+  background: inherit !important;
+}
+
+.dashboard-card-body {
+  padding: var(--dashbord-card-padding);
+  border-radius: var(--dashbord-card-radius);
+  background: var(--dashbord-card-bg) !important;
+  box-shadow: var(--dashbord-card-shadow) !important;
+  transition: all 300ms ease !important;
+}
+
+.dashboard-card-body svg {
+  transform: translateY(5px) !important;
+}
+
+.dashboard-card-body:hover {
+  box-shadow: none !important;
+}
+
+.stats {
+  font-family: 'Monaco', monospace;
+  font-weight: bold;
+}
+
+.stats-counter {
+  font-size: xx-large !important;
+}
+
+.manager-dashboard-table {
+  height: 100% !important;
+}
+
+.table-pagination .page-item.active .page-link {
+  background: #dee2e6 !important;
+  border-color: #dee2e6 !important;
+}
+
+.table-pagination>.page-item>.page-link {
+  color: black !important;
+}
+
+.ticket-modal {
+  width: 70% !important;
+  max-width: 90% !important;
+}
+
+.was-validated .prevent-validation.form-select:valid,
+.prevent-validation.form-select.is-valid {
+  padding: 0.375rem 0.75rem !important;
+  border-color: #ced4da !important;
+  background-image: none !important;
+}
+
+.ticket-button {
+  transform: translateY(-3px) !important;
+  border-radius: 0.8rem !important;
+}
+
+/* tickets page */
+
+.ticket-card {
+  box-shadow: var(--dashbord-card-shadow) !important;
+  border-radius: var(--dashbord-card-radius);
+  transition: all 300ms ease !important;
+}
+
+.ticket-header {
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
+.ticket-card:hover {
+  box-shadow: none !important;
+}
+
+.status-toggle::after {
+  display: none !important;
+}

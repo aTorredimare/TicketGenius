@@ -1,0 +1,130 @@
+version: '3.8'
+
+services:
+  postgres:
+    build: ./db
+    container_name: wa2lab05pgdb
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PWD}
+    networks:
+      - ticketing_server_net
+    ports:
+      - '5432:5432'
+    volumes:
+      - './db/data:/data'
+      # script to create databases
+      - './db/scripts/create_DBs.sql:/docker-entrypoint-initdb.d/create_DBs.sql'
+      # script to create tables
+      - './db/scripts/init.sql:/docker-entrypoint-initdb.d/init.sql'
+      # script to populate tables
+      - './db/scripts/populate.sql:/docker-entrypoint-initdb.d/populate.sql'
+    image: postgres
+    restart: on-failure
+
+  keycloak:
+    container_name: wa2lab05keycloak
+    #x86
+    #image: jboss/keycloak
+    #arm
+    image: mihaibob/keycloak:18.0.2-legacy
+
+    volumes:
+      - './keycloak_config:/tmp/import'
+      - './keycloak_config/realms/export:/tmp/export'
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+    environment:
+      DB_VENDOR: postgres
+      DB_ADDR: postgres
+      DB_PORT: 5432
+      DB_DATABASE: keycloak
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PWD}
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: password
+      KEYCLOAK_FRONTEND_URL: 'http://localhost:8080/auth/'
+      KEYCLOAK_IMPORT: '/tmp/import/realm-export.json'
+    restart: 'no'
+
+    networks:
+      - ticketing_server_net
+
+  server:
+    image: 'ticketing_server:latest'
+    build:
+      context: .
+    container_name: wa2lab05server
+    depends_on:
+      - postgres
+      - keycloak
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/ticketingservice
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+    networks:
+      - ticketing_server_net
+    ports:
+      - '8081:8081'
+    restart: unless-stopped
+
+  tempo:
+    image: grafana/tempo
+    extra_hosts: ['host.docker.internal:host-gateway']
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./observability_tools_config/tempo/tempo-local.yml:/etc/tempo.yaml:ro
+      - ./tempo-data:/tmp/tempo
+    ports:
+      - "14268"  # jaeger ingest
+      - "9411:9411" # zipkin
+    networks:
+      - ticketing_server_net
+
+  loki:
+    image: grafana/loki
+    extra_hosts: ['host.docker.internal:host-gateway']
+    command: [ "-config.file=/etc/loki/local-config.yaml" ]
+    ports:
+      - "3100:3100"                                   # loki needs to be exposed so it receives logs
+    environment:
+      - JAEGER_AGENT_HOST=tempo
+      - JAEGER_ENDPOINT=http://tempo:14268/api/traces # send traces to Tempo
+      - JAEGER_SAMPLER_TYPE=const
+      - JAEGER_SAMPLER_PARAM=1
+    networks:
+      - ticketing_server_net
+
+  prometheus:
+    image: prom/prometheus
+    extra_hosts: ['host.docker.internal:host-gateway']
+    command:
+      - --enable-feature=exemplar-storage
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./observability_tools_config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - ticketing_server_net
+
+  grafana:
+    image: grafana/grafana
+    extra_hosts: ['host.docker.internal:host-gateway']
+    volumes:
+      - ./observability_tools_config/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./observability_tools_config/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards:ro
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+    ports:
+      - "3000:3000"
+    networks:
+      - ticketing_server_net
+
+networks:
+  ticketing_server_net:
+    driver: bridge

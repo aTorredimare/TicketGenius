@@ -1,0 +1,70 @@
+spring:
+  application:
+    name: ticketingServer
+  config:
+    import: optional:file:.env[.properties]
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ticketingservice
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PWD}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          token-uri: ${KEYCLOAK_URL}/auth/realms/SpringBootKeycloak/protocol/openid-connect/token
+          issuer-uri: http://localhost:8080/auth/realms/SpringBootKeycloak
+          jwk-set-uri: ${KEYCLOAK_URL}/auth/realms/SpringBootKeycloak/protocol/openid-connect/certs
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+keycloak:
+  realm: SpringBootKeycloak
+  resource: admin-spring-boot
+  auth-server-url:  ${KEYCLOAK_URL}/auth
+  credentials:
+    secret: w3gIpf66FVNU65kU43wNrwKSs4MLiSfN
+
+jwt:
+  auth:
+    converter:
+      resource-id: springboot-keycloak-client
+      principal-attribute: preferred_username
+
+server:
+  port: 8081
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0 # sampling all in dev, reduce it in prod to save loading
+  zipkin.tracing.endpoint: ${TEMPO_URL}/api/v2/spans
+  endpoints:
+    web:
+      exposure:
+        include: prometheus
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http:
+          server:
+            requests: true
+    tags:
+      application: ticketingServer
+
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: info
+
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss.SSS,Europe/Rome
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
