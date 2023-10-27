@@ -1,4 +1,4 @@
-# WA2_Lab05_G32
+# TicketGenius
 ## Authors:
 - Anfossi Davide (https://github.com/davideanfossi, frontend)
 - Mistruzzi Luca Guglielmo (https://github.com/mistru97, frontend and deployment)
