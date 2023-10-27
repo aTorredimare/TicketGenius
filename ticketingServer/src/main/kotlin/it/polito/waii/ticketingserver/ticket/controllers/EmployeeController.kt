@@ -17,17 +17,6 @@ class EmployeeController(private val employeeService: EmployeeService) {
         return employeeService.findEmployeeByEmployeeId(employeeId)
     }
 
-    /*
-    @GetMapping("/API/test")
-    fun test(authentication: Authentication): String {
-        return authentication.toString()
-    }
-
-    @GetMapping("/API/employees/mail/{mail}")
-    fun getEmployeeByMail(@PathVariable mail: String): EmployeeDTO? {
-        return employeeService.findEmployeeByEmail(mail)
-    }*/
-
     @GetMapping("/API/employees/role/{role}")
     fun getEmployeesByRole(@PathVariable role: ERole): List<EmployeeDTO>? {
         return employeeService.findAllByRole(role)
