@@ -10,10 +10,16 @@ This is the project we developed for the course WebApplicationsII at Politecnico
 
 *(I will provide a description also for all the containers involved in the build process and their purpose, this is only the first commit of this project and I'm writing a quick general readme)*
 
-## Accounts already created on start
-- John Doe, client user (can open tickets and sees his own products) -> `john.doe@mail.com` : `password`
-- Linus Torvalds, employee (can manage tickets and interact with users) -> `linus.torvalds@mail.com` : `password`
-- Steve Jobs, manager (assigns tickets to employees, creates new employee profiles and registers sales for customers) -> `steve.joe@mail.com` : `password`
+## Involved techologies
+- Kotlin
+- Javascript
+- Docker and Docker Compose
+- PostgreSQL
+- Keycloak
+- Tempo
+- Loki
+- Prometheus
+- Graphana
 
 ## How to run 
 ### Prerequisites:
@@ -27,3 +33,10 @@ Just run the provided script mentioned before, it will clean previous client and
 **NOTE**: be sure to check the path to the project assigned to the `BASE` variable in the script, and modify it accordingly to your own machine.
 
 **NOTE2**: feel free to "translate" the script from bash to PowerShell in you are a Windows user and have no access to WSL
+
+
+## Accounts already created on start
+- John Doe, client user (can open tickets and sees his own products) -> `john.doe@mail.com` : `password`
+- Linus Torvalds, employee (can manage tickets and interact with users) -> `linus.torvalds@mail.com` : `password`
+- Steve Jobs, manager (assigns tickets to employees, creates new employee profiles and registers sales for customers) -> `steve.joe@mail.com` : `password`
+
