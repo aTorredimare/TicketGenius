@@ -2,7 +2,7 @@
 
 #IF YOU USE THIS SCRIPT, PLEASE CHECK IF THE PATH TO THE PROJECT TO BUILD IS CORRECT
 echo "CHECK THE PATH CONTAINED IN THE BASE VARIABLE OF THIS SCRIPT IN CASE OF ERROR!!"
-BASE="$HOME/Developer/GitHub/WebApplicationsII/Labs/Lab5/"
+BASE="$HOME/Developer/GitHub/TicketGenius"
 
 cd "$BASE" || exit
 cd client || exit

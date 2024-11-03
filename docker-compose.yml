@@ -5,8 +5,8 @@ services:
     build: ./db
     container_name: wa2lab05pgdb
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PWD}
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
     networks:
       - ticketing_server_net
     ports:
@@ -41,8 +41,8 @@ services:
       DB_ADDR: postgres
       DB_PORT: 5432
       DB_DATABASE: keycloak
-      DB_USER: ${POSTGRES_USER}
-      DB_PASSWORD: ${POSTGRES_PWD}
+      DB_USER: postgres
+      DB_PASSWORD: password
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: password
       KEYCLOAK_FRONTEND_URL: 'http://localhost:8080/auth/'
@@ -62,8 +62,8 @@ services:
       - keycloak
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/ticketingservice
-      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
-      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PWD}
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
     networks:
       - ticketing_server_net
     ports:
